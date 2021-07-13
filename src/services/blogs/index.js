@@ -7,6 +7,9 @@ router
   .route("/")
   .get(async (req, res, next) => {
     try {
+      const query = "SELECT * FROM blogs";
+      const data = await db.query(query);
+      res.send(data.rows);
     } catch (error) {
       console.log(error);
       next(error);
@@ -14,6 +17,10 @@ router
   })
   .post(async (req, res, next) => {
     try {
+      const { title, category, cover } = req.body;
+      const query = `INSERT INTO blogs (title, category, cover) VALUES('${title}', '${category}', '${cover}') RETURNING *`;
+      const data = await db.query(query);
+      res.send(data);
     } catch (error) {
       console.log(error);
       next(error);
